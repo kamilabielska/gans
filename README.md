@@ -1,6 +1,6 @@
 # GANs
-[anime faces data](https://www.kaggle.com/datasets/splcher/animefacedataset)
+data: [anime faces data](https://www.kaggle.com/datasets/splcher/animefacedataset)
 
-literature:
--
--
+***
+**literature**:
+- to be added
