@@ -1,2 +1,6 @@
-# gans
-A study of Generative Adversarial Networks, including experiments using anime faces dataset.
+# GANs
+[anime faces data](https://www.kaggle.com/datasets/splcher/animefacedataset)
+
+literature:
+-
+-
