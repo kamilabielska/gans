@@ -1,5 +1,6 @@
 # GANs
-data: [anime faces dataset](https://www.kaggle.com/datasets/splcher/animefacedataset)
+data: [anime faces dataset](https://www.kaggle.com/datasets/splcher/animefacedataset)  
+![sample images](https://raw.githubusercontent.com/kamilabielska/gans/main/img/sample_images.jpg)
 
 ***
 **literature**:
