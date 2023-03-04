@@ -1,5 +1,9 @@
 # GANs
-data: [anime faces dataset](https://www.kaggle.com/datasets/splcher/animefacedataset)  
+Generative Adversarial Networks are a really interesting subject to study and it gets even more interesting (and at times quite frustrating) when you get to the implementation part and start tweaking all the hyperparameters in hope that *this* one is going to improve the quality of the generated images. Or is going to make the model work at all. It's quite easy to become a little obsessed with searching for and trying new tips and tricks to improve your GAN model.
+
+This repository contains a framework for working with GANs (`gans` folder) — model classes into which one can plug their own generator and discriminator (`models.py`), custom layers (`layers.py`) and callbacks (`callbacks.py`). I found the most success working with DCGANs (Deep Convolutional GANs), which use binary crossentropy as a loss function, whereas Wasserstein GANs seemed more problematic and overall harder to train. Implementing ProGAN model was quite a journey and, even though the code for sure isn't the nicest, I'm just glad that in the end I got it to work.
+
+I focused on generating anime faces using [anime faces dataset](https://www.kaggle.com/datasets/splcher/animefacedataset):
 ![sample images](https://raw.githubusercontent.com/kamilabielska/gans/main/img/sample_images.jpg)
 
 ***
