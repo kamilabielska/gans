@@ -26,7 +26,7 @@ class SaveGeneratedImages(tf.keras.callbacks.Callback):
 				labels=self.labels
 			)
 		else:
-			self.generate_and_compare_samples(
+			self.model.generate_and_compare_samples(
 				real_data=self.real_data,
 				data=self.data,
 				n=self.n,
