@@ -293,7 +293,7 @@ class ProGAN(GAN):
 			with tqdm(total=len(train_data)) as progress:
 				for step, data in enumerate(train_data):
 					callbacks.on_batch_begin(step, logs=logs)
-        			callbacks.on_train_batch_begin(step, logs=logs)
+					callbacks.on_train_batch_begin(step, logs=logs)
 
 					if fade_in_mode:
 						for layer in self.weighted_add_layers:
@@ -340,7 +340,7 @@ class ProGAN(GAN):
 					# 	data_to_plot = data
 
 					callbacks.on_train_batch_end(step, logs=logs)
-        			callbacks.on_batch_end(step, logs=logs)
+					callbacks.on_batch_end(step, logs=logs)
 
 			# if path is not None:
 			# 	image_path = os.path.join(path, str(epoch + 1))
