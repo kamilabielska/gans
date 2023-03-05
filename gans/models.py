@@ -248,9 +248,7 @@ class ProGAN(GAN):
 
 		self.discriminator = tf.keras.Model(inputs=input_layer, outputs=output)
 
-	def train(self, train_data, epochs, n_epochs_grow, path=None, compare=True, n=4, model_graph_path=None,
-		callbacks=None
-		):
+	def train(self, train_data, epochs, n_epochs_grow, n=4, model_graph_path=None, callbacks=None):
 		fade_in_mode = False
 		finished = False
 		delta = 1/(n_epochs_grow*len(train_data))
@@ -336,27 +334,8 @@ class ProGAN(GAN):
 
 					progress.update(1)
 
-					# if step == 0:
-					# 	data_to_plot = data
-
 					callbacks.on_train_batch_end(step, logs=logs)
 					callbacks.on_batch_end(step, logs=logs)
-
-			# if path is not None:
-			# 	image_path = os.path.join(path, str(epoch + 1))
-			# 	labels = None
-			# 	if self.conditional:
-			# 		labels = tf.keras.utils.to_categorical(
-			# 			np.random.choice(self.n_classes, size=n),
-			# 			num_classes=self.n_classes
-			# 		)
-
-			# 	if compare:
-			# 		self.generate_and_compare_samples(
-			# 			real_data=data_to_plot, n=n, out_path=image_path, labels=labels)
-			# 	else:
-			# 		self.model.generate_new_samples(
-			# 			data=self.data, n=self.n, out_path=image_path, labels=self.labels)
 			
 			gen_loss_final = self.gen_loss_tracker.result()
 			disc_loss_final = self.disc_loss_tracker.result()
