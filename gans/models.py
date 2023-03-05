@@ -387,6 +387,16 @@ class ProGAN(GAN):
 			real_string_labels = np.array(self.classes)[np.argmax(real_labels, axis=1)]
 
 		new_samples = (self.generator.predict(gen_data, verbose=0) + 1) / 2
+
+		image_size = new_samples.shape[1]
+		real_data = tf.cond(
+			real_data.shape[1] == image_size,
+			lambda: real_data,
+			lambda: tf.keras.layers.Resizing(
+				image_size, image_size,
+				crop_to_aspect_ratio=True)(real_data)
+		)
+
 		idx = np.random.choice(tf.shape(real_data)[0], size=n, replace=False)
 
 		fig, axes = plt.subplots(2, n, figsize=(16,10))
