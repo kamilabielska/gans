@@ -208,7 +208,7 @@ class ProGAN(GAN):
 		
 		new_block_output = self.building_block(
 			[2*self.n_filters//self.factor, self.n_filters//self.factor],
-			pixel_norm=True, **self.block_kwargs)(upsampled_old_gen)
+			**self.block_kwargs)(upsampled_old_gen)
 		new_block_output = self.gen_output_layer(name='to_rgb')(new_block_output)
 
 		gen_weighted_add = WeightedAdd(alpha=0.0, name='to_skip_add')
