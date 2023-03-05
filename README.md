@@ -11,6 +11,9 @@ I focused on generating anime faces using [anime faces dataset](https://www.kagg
 Here is illustrated the progress of DCGAN on 4 fixed latent vectors (generated images were saved after each of 80 epochs):
 ![dcgan progress](https://github.com/kamilabielska/gans/blob/main/img/gan_progress.gif?raw=true)
 
+And here that of ProGAN (also 4 vectors over 80 epochs):
+![progan progress](https://github.com/kamilabielska/gans/blob/main/img/progan_progress.gif?raw=true)
+
 ***
 **literature**:
 - [Generative Adversarial Networks](https://arxiv.org/pdf/1406.2661.pdf), Goodfellow et al., 2014
