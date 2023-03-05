@@ -4,8 +4,9 @@ import tensorflow as tf
 
 
 class SaveGeneratedImages(tf.keras.callbacks.Callback):
-	def __init__(self, data=None, n=4, path=''):
+	def __init__(self, data=None, real_data=None, n=4, path=''):
 		self.data = data
+		self.real_data = real_data
 		self.n = n if data is None else tf.shape(data)[0].numpy()
 		self.path = path
 		self.labels = None
@@ -17,8 +18,21 @@ class SaveGeneratedImages(tf.keras.callbacks.Callback):
 				np.random.choice(self.model.n_classes, size=self.n),
 				num_classes=self.model.n_classes
 			)
-		self.model.generate_new_samples(
-			data=self.data, n=self.n, out_path=image_path, labels=self.labels)
+		if self.real_data is None:
+			self.model.generate_new_samples(
+				data=self.data,
+				n=self.n,
+				out_path=image_path,
+				labels=self.labels
+			)
+		else:
+			self.generate_and_compare_samples(
+				real_data=self.real_data,
+				data=self.data,
+				n=self.n,
+				out_path=image_path,
+				labels=self.labels
+			)
 
 
 class GaussianSTDAnnealing(tf.keras.callbacks.Callback):

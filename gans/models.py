@@ -248,15 +248,24 @@ class ProGAN(GAN):
 
 		self.discriminator = tf.keras.Model(inputs=input_layer, outputs=output)
 
-	def train(self, train_data, epochs, n_epochs_grow, path, n=4, model_graph_path=None):
+	def train(self, train_data, epochs, n_epochs_grow, path=None, compare=True, n=4, model_graph_path=None,
+		callbacks=None
+		):
 		fade_in_mode = False
 		finished = False
 		delta = 1/(n_epochs_grow*len(train_data))
 		el_spec = train_data.element_spec[0] if self.conditional else train_data.element_spec
 		original_size = el_spec.shape[1]
+		logs = {}
+
+		if callbacks is None:
+			callbacks = tf.keras.callbacks.CallbackList()
+
+		callbacks.on_train_begin(logs=logs)
 
 		for epoch in range(epochs):
 			print(fr'Epoch {epoch+1} / {epochs}')
+			callbacks.on_epoch_begin(epoch, logs=logs)
 			
 			if (epoch+1)%n_epochs_grow == 0:
 				if (epoch+1)%(2*n_epochs_grow) != 0 and not finished:
@@ -283,6 +292,9 @@ class ProGAN(GAN):
 
 			with tqdm(total=len(train_data)) as progress:
 				for step, data in enumerate(train_data):
+					callbacks.on_batch_begin(step, logs=logs)
+        			callbacks.on_train_batch_begin(step, logs=logs)
+
 					if fade_in_mode:
 						for layer in self.weighted_add_layers:
 							if layer.alpha + delta <= 1:
@@ -324,18 +336,27 @@ class ProGAN(GAN):
 
 					progress.update(1)
 
-					if step == 0:
-						data_to_plot = data
+					# if step == 0:
+					# 	data_to_plot = data
 
-			image_path = os.path.join(path, str(epoch + 1))
-			labels = None
-			if self.conditional:
-				labels = tf.keras.utils.to_categorical(
-					np.random.choice(self.n_classes, size=n),
-					num_classes=self.n_classes
-				)
-			self.generate_and_compare_samples(
-				real_data=data_to_plot, n=n, out_path=image_path, labels=labels)
+					callbacks.on_train_batch_end(step, logs=logs)
+        			callbacks.on_batch_end(step, logs=logs)
+
+			# if path is not None:
+			# 	image_path = os.path.join(path, str(epoch + 1))
+			# 	labels = None
+			# 	if self.conditional:
+			# 		labels = tf.keras.utils.to_categorical(
+			# 			np.random.choice(self.n_classes, size=n),
+			# 			num_classes=self.n_classes
+			# 		)
+
+			# 	if compare:
+			# 		self.generate_and_compare_samples(
+			# 			real_data=data_to_plot, n=n, out_path=image_path, labels=labels)
+			# 	else:
+			# 		self.model.generate_new_samples(
+			# 			data=self.data, n=self.n, out_path=image_path, labels=self.labels)
 			
 			gen_loss_final = self.gen_loss_tracker.result()
 			disc_loss_final = self.disc_loss_tracker.result()
@@ -348,8 +369,16 @@ class ProGAN(GAN):
 			self.gen_loss_tracker.reset_states()
 			self.disc_loss_tracker.reset_states()
 
-	def generate_and_compare_samples(self, real_data, n=4, out_path=None, labels=None):
-		gen_data = tf.random.normal([n, self.latent_dim])
+			callbacks.on_epoch_end(epoch, logs=logs)
+
+		callbacks.on_train_end(logs=logs)
+
+	def generate_and_compare_samples(self, real_data, gen_data=None, n=4, out_path=None, labels=None):
+		if gen_data is None:
+			gen_data = tf.random.normal([n, self.latent_dim])
+		else:
+			n = tf.shape(gen_data)[0].numpy()
+
 		if self.conditional:
 			gen_data = tf.concat([gen_data, labels], axis=1)
 			real_data, real_labels = real_data
