@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 import tensorflow.keras.layers as layers
 
+from .layers import WeightedAdd
 from tqdm import tqdm
 
 
