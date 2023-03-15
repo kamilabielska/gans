@@ -1,7 +1,7 @@
 # GANs
-Generative Adversarial Networks are a really interesting subject to study and it gets even more interesting (and at times quite frustrating) when you get to the implementation part and start tweaking all the hyperparameters in hope that *this* one is going to improve the quality of the generated images. It's quite easy to become a little obsessed with searching for and trying new tips and tricks to improve your GAN model.
+Generative Adversarial Networks are a really interesting subject to study and it gets even more interesting (and at times quite frustrating) when you get to the implementation part and start tweaking all the hyperparameters in hope that *this* one is going to improve the quality of generated images. It's quite easy to become a little obsessed with searching for and trying new tips and tricks to improve your GAN model.
 
-I found the most success working with DCGANs (Deep Convolutional GANs), which use binary crossentropy as a loss function, whereas Wasserstein GANs seemed more problematic and overall harder to train. Implementing ProGAN (Progressively Growing GAN) model was quite a journey and, even though the code for sure isn't the nicest, I'm just glad that in the end I got it to work.
+I found the most success working with DCGANs (Deep Convolutional GANs), which use binary crossentropy as a loss function, whereas Wasserstein GANs seemed more problematic and overall harder to train. Implementing ProGAN (Progressively Growing GAN) model was quite a journey and, even though the code for sure isn't the nicest, I'm just glad that in the end I got it to work. Disclaimer: models are not implemented *exactly* as described in the articles, my main goal was to mimic a general concept (e.g. progressive growing). Additional components, particular methods, settings or other details were kept or omitted according to my liking and/or the results they produced.
 
 This repository provides a framework for working with GANs (`gans` folder): model classes into which one can plug their own generator and discriminator (`models.py`), custom layers (`layers.py`) and callbacks (`callbacks.py`). Usage is demonstrated in `anime_gan.ipynb` notebook.
 
@@ -11,7 +11,7 @@ I focused on generating anime faces using [anime faces dataset](https://www.kagg
 Here is illustrated the progress of DCGAN on 4 fixed latent vectors (generated images were saved after each of 80 epochs):
 ![dcgan progress](https://github.com/kamilabielska/gans/blob/main/img/gan_progress.gif?raw=true)
 
-And here that of ProGAN (also 4 vectors over 80 epochs):
+And here that of ProGAN (also 4 fixed vectors over 80 epochs):
 ![progan progress](https://github.com/kamilabielska/gans/blob/main/img/progan_progress.gif?raw=true)
 
 ***

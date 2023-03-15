@@ -79,7 +79,7 @@ class GAN(tf.keras.Model):
 			generated_images = tf.concat([generated_images, label_channels], axis=-1)
 		fake_output = self.discriminator(generated_images, training=training)
 
-		if self.loss_type == 'wgan_gp':
+		if self.gp_weight != 0:
 			gp = self.gradient_penalty(data, generated_images, training)
 		else:
 			gp = 0
