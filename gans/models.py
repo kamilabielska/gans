@@ -177,7 +177,8 @@ class ProGAN(GAN):
 		super().__init__(**kwargs)
 
 	def compile(self, building_block, block_kwargs, gen_output_layer,
-				disc_input_layer, init_n_filters, drift=0, **kwargs):
+				disc_input_layer, init_n_filters, drift=0, mapping_network=None,
+				**kwargs):
 		super().compile(**kwargs)
 		self.building_block = building_block
 		self.block_kwargs = block_kwargs
@@ -185,12 +186,19 @@ class ProGAN(GAN):
 		self.disc_input_layer = disc_input_layer
 		self.n_filters = init_n_filters
 		self.drift = drift
+		self.mapping_network = mapping_network
+
+		if self.mapping_network is not None:
+			self.block_kwargs['mapping_network'] = self.mapping_network.output
 
 		self.weighted_add_layers = []
 		self.factor = 2
 
 	def update_generator(self):
-		input_layer = layers.Input(shape=[self.latent_dim + self.n_classes])
+		if self.mapping_network is None:
+			input_layer = layers.Input(shape=[self.latent_dim + self.n_classes])
+		else:
+			input_layer = self.mapping_network.input
 
 		old_generator = None
 		for layer in self.generator.layers[1:]:
@@ -198,7 +206,11 @@ class ProGAN(GAN):
 				if old_generator is None:
 					old_generator = layer(input_layer)
 				else:
-					old_generator = layer(old_generator)
+					if 'adain' in layer.name:
+						old_generator = layer([
+							old_generator, self.mapping_network.output])
+					else:
+						old_generator = layer(old_generator)
 			elif layer.name == 'to_rgb':
 				old_to_rgb_output = layer(old_generator)
 				layer._name = 'to_skip_old_to_rgb'
@@ -207,8 +219,10 @@ class ProGAN(GAN):
 		upsampled_old_gen = layers.UpSampling2D()(old_generator)
 		
 		new_block_output = self.building_block(
-			[2*self.n_filters//self.factor, self.n_filters//self.factor],
-			**self.block_kwargs)(upsampled_old_gen)
+			which='generator',
+			input_layer=upsampled_old_gen,
+			n_filters=[2*self.n_filters//self.factor, self.n_filters//self.factor],
+			**self.block_kwargs)
 		new_block_output = self.gen_output_layer(name='to_rgb')(new_block_output)
 
 		gen_weighted_add = WeightedAdd(alpha=0.0, name='to_skip_add')
@@ -236,8 +250,10 @@ class ProGAN(GAN):
 		new_block_output = self.disc_input_layer(
 			self.n_filters//self.factor, name='from_rgb')(input_layer)
 		new_block_output = self.building_block(
-			[self.n_filters//self.factor, 2*self.n_filters//self.factor],
-			**self.block_kwargs)(new_block_output)
+			which='discriminator',
+			input_layer=new_block_output,
+			n_filters=[self.n_filters//self.factor, 2*self.n_filters//self.factor],
+			**self.block_kwargs)
 		new_block_output = tf.keras.layers.AveragePooling2D()(new_block_output)
 
 		disc_weighted_add = WeightedAdd(alpha=0.0, name='to_skip_add')

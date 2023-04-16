@@ -91,7 +91,7 @@ class StyleAdaIN(tf.keras.layers.Layer):
 			2*input_shape[0][-1], kernel_initializer='he_uniform')
 		
 	def call(self, inputs):
-		x, latents = inputs
+		x, latents = inputs[0], inputs[1]
 		y = self.affine_transform(latents)
 		y_s, y_b = tf.split(y, num_or_size_splits=2, axis=1)
 
