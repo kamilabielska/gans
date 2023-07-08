@@ -11,7 +11,7 @@ def resize_images(path, size):
     non_square = 0
 
     with tqdm(total=len(os.listdir(path))) as progress:
-        for filepath in glob.glob('**/*.jpg', recursive=True):
+        for filepath in glob.glob('**/*.jpg', recursive=True, root_dir=path):
             try:
                 image = cv2.imread(filepath)
                 height, width, chan = image.shape
