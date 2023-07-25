@@ -16,12 +16,14 @@ And here that of ProGAN (also 4 fixed vectors over 80 epochs):
 ![progan progress](https://github.com/kamilabielska/gans/blob/main/img/progan_progress.gif?raw=true)
 
 ## StyleGAN
-I experimented with custom implementations of StyleGAN and StyleGAN2, building on top of the above models, but the models kept diverging after several (10-20) epochs of training. Additionally, each epoch was taking a long time due to the complexity of the model, so playing with hyperparameters and architecture adjustments became quite wearisome. Therefore I moved to StyleGAN3 and this time used their [official implementation](https://github.com/NVlabs/stylegan3) available on Github. After initial hurdles with setting up the environment on Colab, I finally got it to work. However, even here training from scratch, after tweaking the hyperparameters, did not lead to satisfying results in reasonable time and after using reasonable amount of resources. Transfer learning turned out to be the best option, even though it required upscaling images in my dataset to 256x256 resolution. I used model trained on the FFHQ-U dataset, as it also consists of faces, although real human ones. The Colab set up and training code are available in the `anime_stylegan3.ipynb` notebook (careful, github preview messes up bash cells).
+I experimented with custom implementations of StyleGAN and StyleGAN2, building on top of the above framework, but the models kept diverging after several (10-20) epochs of training. Additionally, each epoch was taking a long time due to the complexity of the model, so playing with hyperparameters and architecture adjustments became quite wearisome.
+
+Because of that I moved to StyleGAN3 and this time used their [official implementation](https://github.com/NVlabs/stylegan3) available on Github. After some hurdles I managed to set up the environment on Colab and finally got the code to work. However, even here training from scratch and tweaking the hyperparameters did not lead to satisfying results in reasonable time and after using reasonable amount of resources. Transfer learning turned out to be the best option, even though it required upscaling images in my dataset to 256x256 resolution. I used model trained on the FFHQ-U dataset, as it also consists of faces, although real human ones. The Colab set up and training code are available in the `anime_stylegan3.ipynb` notebook (careful, github preview messes up bash cells).
 
 Here is illustrated the process of fine-tuning the model:
 ![stylegan3 progress](https://github.com/kamilabielska/gans/blob/main/img/stylegan3_progress.gif?raw=true)
 
-And here is a fun interpolation video:
+And here is a fun interpolation video (how cool is that??):
 ![stylegan3 interpolation](https://github.com/kamilabielska/gans/blob/main/img/stylegan3_inter.gif?raw=true)
 
 ***
