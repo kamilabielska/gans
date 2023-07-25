@@ -1,7 +1,7 @@
 # GANs
 Generative Adversarial Networks are a really interesting subject to study and it gets even more interesting (and at times quite frustrating) when you get to the implementation part and start tweaking all the hyperparameters in hope that *this* one is going to improve the quality of generated images. It's quite easy to become a little obsessed with searching for and trying new tips and tricks to improve your GAN model.
 
-## DCGAN nad ProGAM
+## DCGAN nad ProGAN
 I found the most success working with DCGANs (Deep Convolutional GANs), which use binary crossentropy as a loss function, whereas Wasserstein GANs seemed more problematic and overall harder to train. Implementing ProGAN (Progressively Growing GAN) model was quite a journey and, even though the code for sure isn't the nicest, I'm just glad that in the end I got it to work. Disclaimer: models are not implemented *exactly* as described in the articles, my main goal was to mimic a general concept (e.g. progressive growing). Additional components, particular methods, settings or other details were kept or omitted according to my liking and/or the results they produced.
 
 This repository provides a framework for working with GANs (`gans` folder): model classes into which one can plug their own generator and discriminator (`models.py`), custom layers (`layers.py`) and callbacks (`callbacks.py`). Usage is demonstrated in `anime_gan.ipynb` notebook.
@@ -16,10 +16,13 @@ And here that of ProGAN (also 4 fixed vectors over 80 epochs):
 ![progan progress](https://github.com/kamilabielska/gans/blob/main/img/progan_progress.gif?raw=true)
 
 ## StyleGAN
-I experimented with custom implementation of StyleGAN and StyleGAN2, building on top of the above models, but the models kept diverging after several (10-20) epochs of training. Additionally, each epoch was taking a long time due to the complexity of the model, so playing with hyperparameters and architecture adjustments became quite wearisome. Therefore I moved to StyleGAN3 and this time used their [official implementation](https://github.com/NVlabs/stylegan3) available on Github. After initial curdles with setting up the environment on Colab, I finally got it to work. However, even here training from scratch, after tweaking the hyperparameters, did not lead to satisfying results in reasonable time and after using reasonable amount of resources. Transfer learning turned out to be the best option, even thought it required upscaling images in my dataset to be 256x256. I used model trained on the FFHQ-U dataset, as it also consists of faces, althought human.
+I experimented with custom implementations of StyleGAN and StyleGAN2, building on top of the above models, but the models kept diverging after several (10-20) epochs of training. Additionally, each epoch was taking a long time due to the complexity of the model, so playing with hyperparameters and architecture adjustments became quite wearisome. Therefore I moved to StyleGAN3 and this time used their [official implementation](https://github.com/NVlabs/stylegan3) available on Github. After initial hurdles with setting up the environment on Colab, I finally got it to work. However, even here training from scratch, after tweaking the hyperparameters, did not lead to satisfying results in reasonable time and after using reasonable amount of resources. Transfer learning turned out to be the best option, even thought it required upscaling images in my dataset to 256x256 resolution. I used model trained on the FFHQ-U dataset, as it also consists of faces, although real human ones. The Colab set up and training code are available in the `anime_stylegan3.ipynb` notebook (careful, github preview messes up bash cells).
 
 Here is illustrated the process of fine-tuning the model:
 ![stylegan3 progress](https://github.com/kamilabielska/gans/blob/main/img/stylegan3_progress.gif?raw=true)
+
+And here is a fun interpolation video:
+![stylegan3 interpolation](https://github.com/kamilabielska/gans/blob/main/img/stylegan3_inter.mp4?raw=true)
 
 ***
 **literature**:
